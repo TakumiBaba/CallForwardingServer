@@ -2,8 +2,8 @@ require "rubygems"
 require "sinatra"
 
 
-get "/" do 
-  "hoge"
+get "/:param" do 
+  params[:param]
 end
 
 post "/" do
