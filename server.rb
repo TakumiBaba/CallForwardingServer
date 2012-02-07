@@ -2,8 +2,8 @@ require "rubygems"
 require "sinatra"
 
 
-get "/:param" do 
-  params[:param]
+get "/:id/:state" do 
+  params[:id] + params[:state]
 end
 
 post "/" do
