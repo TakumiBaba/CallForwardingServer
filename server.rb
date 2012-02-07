@@ -3,5 +3,5 @@ require "sinatra"
 
 
 get "/" do 
-  puts "hoge"
+  "hoge"
 end
