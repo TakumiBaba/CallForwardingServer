@@ -7,5 +7,5 @@ get "/" do
 end
 
 post "/" do
-  "hoge"
+  params[:hoge]
 end
