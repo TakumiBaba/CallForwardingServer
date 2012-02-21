@@ -1,0 +1,29 @@
+{
+    "name": "callForwardingServer",
+    "description": "call",
+    "version": "0.0.1",
+    "author": "TakumiBaba",
+    "dependencies": {
+        "connect": "git://github.com/senchalabs/connect.git",
+        "commander": "0.5.1",
+        "mime": "1.2.4",
+        "mkdirp": "0.3.0",
+        "debug": "*"
+    },
+    "devDependencies": {
+        "ejs": "*",
+        "mocha": "*",
+        "jade": "*",
+        "stylus": "*",
+        "should": "*",
+        "connect-redis": "*"
+    },
+    "repository": "git://github.com/visionmedia/express",
+    "main": "index",
+    "bin": { "express": "./bin/express" },
+    "scripts": {
+        "prepublish" : "npm prune",
+        "test": "make test"
+    },
+    "engines": { "node":">= 0.5.0 < 0.7.0" }
+}
