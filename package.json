@@ -16,7 +16,9 @@
         "jade": "*",
         "stylus": "*",
         "should": "*",
-        "connect-redis": "*"
+        "connect-redis": "*",
+        "redis-client" : "*",
+        "uuid" : "*"
     },
     "repository": "git://github.com/visionmedia/express",
     "main": "index",

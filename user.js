@@ -1,34 +1,26 @@
 var mongoose = require('mongoose'),
     sechash  =require('sechash');
 var db = mongoose.connect('mongodb://localhost:27017/test');
-
+var uuid = require('node-uuid');
 
 var Schema = mongoose.Schema;
 
-var post = new Schema({
+var UserData = new Schema({
     username : String,
     password : String,
+    uuid : String,
     date : Date
 });
 
-mongoose.model('post',post);
+mongoose.model('userdata',UserData);
 
-var Post = mongoose.model('post');
-
-var s = new Post();
+var User = mongoose.model('userdata');
+/*
+var s = new User();
 
 s.username = "takumi";
 s.password = sechash.strongHashSync('md5',"baba");
+s.uuid = uuid.v4();
 s.date = Date.now();
-
-s.save(function(err){
-    if(!err)console.log("pokkkkkk!");
-});
-
-Post.find({username : "hoge"},function(err,docs){
-   if(!err){
-       for(var i=0;i<docs.length;i++){
-           console.log(docs[i]);
-       }
-   }
-});
+*/
+exports.UserData = User;
