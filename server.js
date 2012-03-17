@@ -15,6 +15,14 @@ var UserData = new Schema({
     date : Date
 });
 
+var client = require('redis-node').createClient();
+var publisher = require('redis-node').createClient();
+/*
+var client = require('redis-node').createClient();
+client.subscribeTo("*",function(channel,message){
+	console.log(channel,message);
+});
+*/
 mongoose.model('user',UserData);
 
 var app = express.createServer();
@@ -36,6 +44,7 @@ app.get('/:user/:password/calling',function(req,res){
         if(!err && docs[0]){
             users[docs[0].uuid].emit("call","私だ！");
             console.log("set");
+			
         }else{
             console.log("undefined");
           
@@ -63,6 +72,9 @@ app.get('/:user/:password/signup',function(req,res){
 
     var User = mongoose.model('user');
     var u = new User();
+	console.log(u);
+	console.log("-----------");
+	console.log(new User());
 
     u.username = req.params.user;
     u.password = sechash.strongHashSync('md5',req.params.password,"takumibaba");
@@ -89,8 +101,12 @@ app.post('/call',function(req,res){
     User.find({username:username,password:password},function(err,docs){
         console.log(docs);
         if(!err && docs[0]){
+			
             if(users[docs[0].uuid]){
-                users[docs[0].uuid].emit("call","私だよ〜");
+				publisher.publish(docs[0].uuid,"call");
+            //    users[docs[0].uuid].emit("call","私だよ〜");
+//				console.log(docs[0].socket);
+//				docs[0].socket.emit("call","はい");
             }else{
                 console.log("ないよ！");
                 }
@@ -111,7 +127,8 @@ app.post('/discall',function(req,res){
         console.log(docs);
         if(!err && docs[0]){
             if(users[docs[0].uuid]){
-                users[docs[0].uuid].emit("discall","私だよ〜");
+				publisher.publish(docs[0].uuid,"discall");
+//                users[docs[0].uuid].emit("discall","私だよ〜");
             }
 
         }
@@ -124,6 +141,16 @@ app.listen(4567);
 
 //from chrome client access
 
+
+io.configure(function(){
+	io.set('transports', [
+	    'websocket'
+	  , 'flashsocket'
+	  , 'htmlfile'
+	  , 'xhr-polling'
+	  , 'jsonp-polling'
+	  ]);
+});
 
 io.sockets.on('connection', function (socket) {
     var user;
@@ -142,6 +169,12 @@ io.sockets.on('connection', function (socket) {
                 console.log("ログインしたよ！");
                 users[docs[0].uuid] = socket;
                 console.log(docs[0]);
+				docs[0].socket = socket;
+				console.log(docs[0].socket);
+				client.subscribeTo(docs[0].uuid,function(channel,message){
+					socket.emit(message,"俺だ！");
+				});
+				
             }else{
                 console.log("ログイン出来ません！");
             }
@@ -157,7 +190,6 @@ io.sockets.on('connection', function (socket) {
             pass = sechash.strongHashSync("md5",data.pass,"takumibaba");
         User.find({username:name,password:pass},function(err,docs){
            if(!err && docs[0]){
-               users[docs[0].uuid] = null;
            }
         });
     })

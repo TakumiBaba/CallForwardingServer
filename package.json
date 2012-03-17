@@ -20,7 +20,6 @@
         "redis-client" : "*",
         "uuid" : "*"
     },
-    "repository": "git://github.com/visionmedia/express",
     "main": "index",
     "bin": { "express": "./bin/express" },
     "scripts": {
